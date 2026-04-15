@@ -1,0 +1,35 @@
+.header {
+    padding-bottom: 5px;
+    top: 25px;
+    left: 5px;
+    right: 5px;
+    border: 6px solid navy;
+    padding: 10px;
+    border-bottom: 3px solid navy;
+
+}
+
+.footer {
+    bottom: 25px;
+    left: 5px;
+    right: 5px;
+    text-align: center;
+    padding: 5px; 
+    border:  6px solid navy;
+    border-top: 3px solid navy;}
+
+.body {
+    border: 6px solid navy;
+  bottom: 150px;
+    left: 5px;
+    right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;}
+
+.overlapfix {
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+} 

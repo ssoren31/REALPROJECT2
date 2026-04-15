@@ -1,0 +1,14 @@
+p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: gray;
+}
+
+h1 { 
+    text-decoration: underline;
+}
+
+.bold {font-weight: bolder;}
+.box4runner {
+    border: 2px dotted gray;
+    width: fit-content;
+}

@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BYU Laundry</title>
+  <style>
+    :root {
+      --navy: #002e5d;
+      --royal: #0f5fbf;
+      --sky: #dbeeff;
+      --white: #ffffff;
+      --ink: #16324f;
+      --muted: #5d6f84;
+      --line: #d7e1ec;
+      --surface: rgba(255, 255, 255, 0.86);
+      --danger: #c0392b;
+      --warn: #d68910;
+      --success: #1e874b;
+      --shadow: 0 20px 50px rgba(0, 37, 77, 0.12);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(15, 95, 191, 0.22), transparent 26%),
+        radial-gradient(circle at top right, rgba(0, 46, 93, 0.18), transparent 30%),
+        linear-gradient(180deg, #f4f8fc 0%, #edf4fb 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .app-shell {
+      width: min(1200px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1rem 0 4rem;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 1.6rem 2rem;
+      border-radius: 32px;
+      color: var(--white);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 45%),
+        linear-gradient(135deg, var(--navy), #003f7f 55%, var(--royal));
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      right: -70px;
+      top: -100px;
+      background: rgba(255, 255, 255, 0.08);
+      filter: blur(4px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .hero-brand {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 150px;
+    }
+
+    .hero-logo {
+      max-width: 720px;
+      width: min(100%, 720px);
+      height: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+
+    .hero-lower {
+      display: grid;
+      grid-template-columns: auto minmax(520px, 1fr);
+      gap: 1.25rem;
+      align-items: end;
+      justify-content: space-between;
+    }
+
+    .hero-copy {
+      justify-self: end;
+      text-align: left;
+      white-space: normal;
+      max-width: 100%;
+      font-size: clamp(1rem, 1.2vw, 1.15rem);
+    }
+
+    .eyebrow {
+      margin: 0;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      opacity: 0.78;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .button,
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.85rem 1.2rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .button:hover,
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      color: var(--navy);
+      background: var(--white);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    }
+
+    .button-secondary {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .main-grid {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    .top-stats {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card {
+      padding: 1.2rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .stat-label {
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .stat-value {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .stat-footnote {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .content-grid {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .forms-grid {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    .column-stack {
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .section-card {
+      padding: 1.2rem;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    .section-head p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.5;
+    }
+
+    .pill {
+      align-self: start;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: var(--sky);
+      color: var(--royal);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .section-kicker {
+      margin: 0 0 0.65rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--royal);
+      font-weight: 800;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.9rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .inventory-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 0.95rem;
+      font: inherit;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 3px solid rgba(15, 95, 191, 0.12);
+      border-color: var(--royal);
+    }
+
+    textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .form-actions,
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+    }
+
+    .action-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--royal), #2f7fe0);
+      box-shadow: 0 12px 24px rgba(15, 95, 191, 0.18);
+    }
+
+    .action-muted {
+      color: var(--navy);
+      background: #e9f2fb;
+    }
+
+    .action-danger {
+      color: var(--danger);
+      background: #ffe9e6;
+    }
+
+    .message {
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: #eaf7ef;
+      color: var(--success);
+    }
+
+    .message.error {
+      background: #fff1ef;
+      color: var(--danger);
+    }
+
+    .inventory-health {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .summary-graphic {
+      display: grid;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: minmax(110px, 150px) 1fr auto;
+      gap: 0.8rem;
+      align-items: center;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .summary-label {
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .summary-track {
+      position: relative;
+      height: 12px;
+      background: #e3ebf5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .summary-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #6dc48d, #2f8f54);
+    }
+
+    .summary-fill.watch {
+      background: linear-gradient(90deg, #f4c96b, #d68910);
+    }
+
+    .summary-fill.alert {
+      background: linear-gradient(90deg, #ee8e84, #c0392b);
+    }
+
+    .summary-value {
+      font-weight: 800;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .health-row {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      overflow: hidden;
+    }
+
+    .health-summary {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.95rem 1rem;
+    }
+
+    .health-name {
+      font-weight: 800;
+      color: var(--navy);
+      font-size: 1.04rem;
+    }
+
+    .health-brief {
+      margin-top: 0.2rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .detail-toggle {
+      border-top: 1px solid var(--line);
+      padding: 0.85rem 1rem 1rem;
+      background: rgba(245, 249, 253, 0.72);
+    }
+
+    .detail-toggle summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--royal);
+      list-style: none;
+    }
+
+    .detail-toggle summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .detail-toggle summary::after {
+      content: "Show Details";
+    }
+
+    .detail-toggle[open] summary::after {
+      content: "Hide Details";
+    }
+
+    .detail-body {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .health-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .health-status::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .status-good {
+      background: #e7f7ee;
+      color: var(--success);
+    }
+
+    .status-watch {
+      background: #fff3df;
+      color: var(--warn);
+    }
+
+    .status-alert {
+      background: #ffe6e2;
+      color: var(--danger);
+    }
+
+    .meter {
+      position: relative;
+      height: 12px;
+      border-radius: 999px;
+      background: #e3ebf5;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--royal), #55a3ff);
+    }
+
+    .metric-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    .metric {
+      padding: 0.7rem 0.8rem;
+      border-radius: 14px;
+      background: #f5f9fd;
+    }
+
+    .metric-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-value {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    th,
+    td {
+      padding: 0.9rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      background: #eff5fb;
+      color: var(--navy);
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr {
+      transition: background 0.18s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(219, 238, 255, 0.55);
+    }
+
+    .empty-state {
+      padding: 1.4rem;
+      border: 1px dashed #b8c9dd;
+      border-radius: 18px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .note {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .footer-note {
+      margin-top: 1rem;
+      font-size: 0.92rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .packet-grid {
+      display: grid;
+      gap: 0.8rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .callout {
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: #eff6ff;
+      border: 1px solid #cfe1f7;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tools-card {
+      background: rgba(248, 251, 255, 0.88);
+    }
+
+    .collapsible-section {
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .collapsible-section > summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 800;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .collapsible-section > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .collapsible-section > summary::after {
+      content: "+";
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--royal);
+      background: #e9f2fb;
+      flex: 0 0 auto;
+    }
+
+    .collapsible-section[open] > summary::after {
+      content: "-";
+    }
+
+    .collapsible-body {
+      padding: 0 1.2rem 1.2rem;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .compact-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    @media (max-width: 980px) {
+      .top-stats,
+      .forms-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app-shell {
+        width: min(100% - 1rem, 1200px);
+      }
+
+      .hero,
+      .section-card {
+        padding: 1.1rem;
+        border-radius: 22px;
+      }
+
+      .top-stats,
+      .content-grid,
+      .forms-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .inventory-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-brand {
+        min-height: auto;
+      }
+
+      .health-summary {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .summary-row {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-lower {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy {
+        justify-self: start;
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .inventory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions,
+      .form-actions,
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .button,
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- This top banner introduces the app and gives users quick action buttons. -->
+    <header class="hero">
+      <div class="hero-content">
+        <div class="hero-brand">
+          <img
+            class="hero-logo"
+            src="https://linens.byu.edu/DSF/IMGS/255A145E-B172-4B27-B5B7-4907D4C731CC/IMAGES/255A145E-B172-4B27-B5B7-4907D4C731CC/BANNERANDLOGOS/COMPANY/BL86/RESPONSIVELOGO.PNG?V=1&D=11-10-23-19-09-09&CORE=16.2.0.29083"
+            alt="BYU Laundry logo"
+          />
+        </div>
+        <div class="hero-lower">
+          <div class="hero-actions">
+            <button class="button button-primary" type="button" id="jumpToRental">Log Rental</button>
+            <button class="button button-secondary" type="button" id="jumpToSnapshot">Enter Warehouse Count</button>
+          </div>
+          <p class="hero-copy">
+            Track rentals, enter counts, and spot what may be missing.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <!-- These top summary cards show the most important at-a-glance numbers. -->
+      <section class="top-stats" id="summaryCards">
+        <article class="card stat-card">
+          <div class="stat-label">Total Rentals Logged</div>
+          <div class="stat-value" id="totalRentalsCount">0</div>
+          <div class="stat-footnote">How many rental entries have been saved</div>
+        </article>
+        <article class="card stat-card">
+          <div class="stat-label">Total Items Rented</div>
+          <div class="stat-value" id="totalUnitsSent">0</div>
+          <div class="stat-footnote">All items included in every rental so far</div>
+        </article>
+        <article class="card stat-card">
+          <div class="stat-label">Latest Warehouse Count</div>
+          <div class="stat-value" id="latestSnapshotDate">None</div>
+          <div class="stat-footnote">Most recent time the warehouse was counted</div>
+        </article>
+        <article class="card stat-card">
+          <div class="stat-label">Missing / Unaccounted For</div>
+          <div class="stat-value" id="totalLossUnits">0</div>
+          <div class="stat-footnote">Estimated using the most recent warehouse count</div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <div class="stack">
+          <div class="forms-grid">
+            <div class="column-stack">
+              <!-- This form records each outgoing rental to a department or group. -->
+              <section class="card section-card" id="rentalSection">
+                <div class="section-head">
+                  <div>
+                    <h2>Rental Log</h2>
+                    <p>
+                      Record shotgun packets and any extra individual linen items. Packet counts automatically add the matching items for you.
+                    </p>
+                  </div>
+                  <span class="pill">Outgoing inventory</span>
+                </div>
+
+                <div class="message" id="rentalMessage" aria-live="polite"></div>
+
+                <form id="rentalForm">
+                  <div class="form-grid">
+                    <label>
+                      Department / Group Name
+                      <input type="text" id="departmentName" placeholder="Campus Events" required />
+                    </label>
+                    <label>
+                      Date Sent Out
+                      <input type="date" id="rentalDate" required />
+                    </label>
+                  </div>
+
+                  <div class="packet-grid">
+                    <label>
+                      Men's Shotgun Packets
+                      <input type="number" min="0" step="1" inputmode="numeric" id="mensPackets" value="0" />
+                    </label>
+                    <label>
+                      Women's Shotgun Packets
+                      <input type="number" min="0" step="1" inputmode="numeric" id="womensPackets" value="0" />
+                    </label>
+                  </div>
+
+                  <div class="callout">
+                    Each men's packet includes 1 blanket, 1 sheet, 1 pillowcase, 1 hand towel, and 1 bath towel.
+                    Each women's packet includes the same items plus 1 makeup towel.
+                  </div>
+
+                  <div class="inventory-grid" id="rentalInputs"></div>
+
+                  <label>
+                    Rental Notes
+                    <textarea id="rentalNotes" placeholder="Optional: conference weekend, emergency order, etc."></textarea>
+                  </label>
+
+                  <div class="form-actions">
+                    <button class="action-primary" type="submit">Save Rental</button>
+                    <button class="action-muted" type="button" id="seedDemoData">Load Demo Data</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+
+            <div class="column-stack">
+              <!-- This form records a physical warehouse count for the latest available inventory. -->
+              <section class="card section-card" id="snapshotSection">
+                <div class="section-head">
+                  <div>
+                    <h2>Warehouse Count</h2>
+                    <p>
+                      Enter the actual number of items currently in the warehouse. The newest count is used automatically in the inventory check.
+                    </p>
+                  </div>
+                  <span class="pill">Periodic count</span>
+                </div>
+
+                <div class="message" id="snapshotMessage" aria-live="polite"></div>
+
+                <form id="snapshotForm">
+                  <div class="form-grid">
+                    <label>
+                      Count Date
+                      <input type="date" id="snapshotDate" required />
+                    </label>
+                    <label>
+                      Recorded By / Office Note
+                      <input type="text" id="snapshotRecorder" placeholder="Optional: office admin name" />
+                    </label>
+                  </div>
+
+                  <div class="inventory-grid" id="snapshotInputs"></div>
+
+                  <label>
+                    Count Notes
+                    <textarea id="snapshotNotes" placeholder="Optional: delayed returns, event surge, damaged load, etc."></textarea>
+                  </label>
+
+                  <div class="form-actions">
+                    <button class="action-primary" type="submit">Save Warehouse Count</button>
+                  </div>
+                </form>
+              </section>
+            </div>
+          </div>
+
+          <!-- This dashboard section holds the calculated health view for each linen type. -->
+          <section class="card section-card">
+            <p class="section-kicker">Review Results</p>
+            <div class="section-head">
+              <div>
+                <h2>Inventory Check</h2>
+                <p>
+                  This section compares what you expected to have in the warehouse with what was actually counted.
+                  It helps estimate what may still be out or may be missing.
+                </p>
+              </div>
+              <span class="pill" id="storageStatus">Local browser storage enabled</span>
+            </div>
+
+            <div class="summary-graphic" id="summaryGraphic"></div>
+            <details class="collapsible-section" id="itemDetailsSection">
+              <summary>
+                <span>Item Details</span>
+              </summary>
+              <div class="collapsible-body">
+                <p class="compact-note">Open this section to review detailed numbers for each linen type.</p>
+                <div class="inventory-health" id="inventoryHealth"></div>
+              </div>
+            </details>
+            <p class="footer-note" id="dashboardFootnote"></p>
+          </section>
+
+          <div class="forms-grid">
+            <details class="collapsible-section">
+              <summary>
+                <span>Setup</span>
+              </summary>
+              <div class="collapsible-body">
+                <p class="compact-note">Update your starting inventory and usual rental length when needed.</p>
+                <section class="card section-card">
+                  <div class="message" id="settingsMessage" aria-live="polite"></div>
+                  <form id="settingsForm">
+                    <div class="form-grid">
+                      <label>
+                        Usual Rental Length (Days)
+                        <input type="number" min="1" step="1" id="rentalCycleDays" />
+                      </label>
+                    </div>
+
+                    <div class="settings-grid" id="settingsInputs"></div>
+
+                    <div class="form-actions">
+                      <button class="action-primary" type="submit">Save Settings</button>
+                    </div>
+                  </form>
+                </section>
+              </div>
+            </details>
+
+            <details class="collapsible-section">
+              <summary>
+                <span>Tools</span>
+              </summary>
+              <div class="collapsible-body">
+                <p class="compact-note">Use demo data, export a backup, or reset the app.</p>
+                <section class="card section-card tools-card">
+                  <div class="toolbar">
+                    <button class="action-muted" type="button" id="exportData">Export JSON</button>
+                    <button class="action-muted" type="button" id="importDataButton">Import JSON</button>
+                    <button class="action-danger" type="button" id="clearData">Reset To Blank App</button>
+                  </div>
+                  <input type="file" id="importFile" accept="application/json" hidden />
+                  <div class="callout">
+                    Resetting clears demo data, rentals, warehouse counts, and locally saved browser data so you can present from a clean slate.
+                  </div>
+                  <p class="note">
+                    Data is stored locally on this device using browser storage. It does not sync across computers and does not require a backend.
+                  </p>
+                </section>
+              </div>
+            </details>
+          </div>
+
+          <!-- This history section helps users review what has already been entered. -->
+          <details class="collapsible-section">
+            <summary>
+              <span>History</span>
+            </summary>
+            <div class="collapsible-body">
+              <p class="compact-note">Review past rentals and warehouse counts over time.</p>
+              <div class="stack">
+                <div>
+                  <h3>Rental History</h3>
+                  <div class="table-wrap" id="rentalHistoryWrap"></div>
+                </div>
+                <div>
+                  <h3>Warehouse Count History</h3>
+                  <div class="table-wrap" id="snapshotHistoryWrap"></div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // This constant defines the main item categories used throughout the app.
+    const ITEM_CONFIG = [
+      { key: "bathTowels", label: "Bath Towels", short: "Bath" },
+      { key: "handTowels", label: "Hand Towels", short: "Hand" },
+      { key: "makeupTowels", label: "Makeup Towels", short: "Makeup" },
+      { key: "sheets", label: "Sheets", short: "Sheets" },
+      { key: "pillowcases", label: "Pillowcases", short: "Pillow" },
+      { key: "blankets", label: "Blankets", short: "Blankets" }
+    ];
+
+    // These are the starting inventory estimates provided for the project.
+    const DEFAULT_STARTING_INVENTORY = {
+      bathTowels: 1000,
+      handTowels: 1500,
+      makeupTowels: 500,
+      sheets: 1000,
+      pillowcases: 1200,
+      blankets: 2000
+    };
+
+    const STORAGE_KEY = "linen-loss-tracker-state";
+
+    // This object holds all app data in memory while the page is open.
+    let state = loadState();
+
+    const rentalInputs = document.getElementById("rentalInputs");
+    const snapshotInputs = document.getElementById("snapshotInputs");
+    const settingsInputs = document.getElementById("settingsInputs");
+    const rentalForm = document.getElementById("rentalForm");
+    const snapshotForm = document.getElementById("snapshotForm");
+    const settingsForm = document.getElementById("settingsForm");
+    const rentalMessage = document.getElementById("rentalMessage");
+    const snapshotMessage = document.getElementById("snapshotMessage");
+    const settingsMessage = document.getElementById("settingsMessage");
+    const inventoryHealth = document.getElementById("inventoryHealth");
+    const summaryGraphic = document.getElementById("summaryGraphic");
+    const rentalHistoryWrap = document.getElementById("rentalHistoryWrap");
+    const snapshotHistoryWrap = document.getElementById("snapshotHistoryWrap");
+    const totalRentalsCount = document.getElementById("totalRentalsCount");
+    const totalUnitsSent = document.getElementById("totalUnitsSent");
+    const latestSnapshotDate = document.getElementById("latestSnapshotDate");
+    const totalLossUnits = document.getElementById("totalLossUnits");
+    const dashboardFootnote = document.getElementById("dashboardFootnote");
+    const storageStatus = document.getElementById("storageStatus");
+    const importFile = document.getElementById("importFile");
+
+    // This sets today's date as a default so users can submit quickly.
+    document.getElementById("rentalDate").value = todayString();
+    document.getElementById("snapshotDate").value = todayString();
+
+    buildDynamicInputs();
+    attachEvents();
+    render();
+
+    // This function creates the repeated quantity input fields from the item list.
+    function buildDynamicInputs() {
+      settingsInputs.innerHTML = ITEM_CONFIG.map((item) => `
+        <label>
+          ${item.label}
+          <input type="number" min="0" step="1" inputmode="numeric" data-item="${item.key}" data-form="settings" value="${state.startingInventory[item.key]}" />
+        </label>
+      `).join("");
+
+      rentalInputs.innerHTML = ITEM_CONFIG.map((item) => `
+        <label>
+          ${item.label}
+          <input type="number" min="0" step="1" inputmode="numeric" data-item="${item.key}" data-form="rental" value="0" />
+        </label>
+      `).join("");
+
+      snapshotInputs.innerHTML = ITEM_CONFIG.map((item) => `
+        <label>
+          ${item.label}
+          <input type="number" min="0" step="1" inputmode="numeric" data-item="${item.key}" data-form="snapshot" value="${state.startingInventory[item.key]}" />
+        </label>
+      `).join("");
+
+      document.getElementById("rentalCycleDays").value = state.settings.rentalCycleDays;
+    }
+
+    // This function connects buttons and forms to the JavaScript logic.
+    function attachEvents() {
+      settingsForm.addEventListener("submit", handleSettingsSubmit);
+      rentalForm.addEventListener("submit", handleRentalSubmit);
+      snapshotForm.addEventListener("submit", handleSnapshotSubmit);
+      document.getElementById("seedDemoData").addEventListener("click", seedDemoData);
+      document.getElementById("clearData").addEventListener("click", clearAllData);
+      document.getElementById("exportData").addEventListener("click", exportData);
+      document.getElementById("importDataButton").addEventListener("click", () => importFile.click());
+      importFile.addEventListener("change", importData);
+      document.getElementById("jumpToRental").addEventListener("click", () => {
+        document.getElementById("rentalSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      document.getElementById("jumpToSnapshot").addEventListener("click", () => {
+        document.getElementById("snapshotSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+
+    // This saves editable assumptions that power the calculations in the dashboard.
+    function handleSettingsSubmit(event) {
+      event.preventDefault();
+      clearMessage(settingsMessage);
+
+      const rentalCycleDays = Math.max(1, Number(document.getElementById("rentalCycleDays").value) || 7);
+      const startingInventory = collectItemValues("settings");
+
+      state.settings.rentalCycleDays = rentalCycleDays;
+      state.startingInventory = startingInventory;
+
+      saveState();
+      resetNumberInputs("snapshot", null, state.startingInventory);
+      showMessage(settingsMessage, "Settings saved. Dashboard assumptions have been updated.", "success");
+      render();
+    }
+
+    // This handles saving a new outgoing rental entry.
+    function handleRentalSubmit(event) {
+      event.preventDefault();
+      clearMessage(rentalMessage);
+
+      const department = document.getElementById("departmentName").value.trim();
+      const date = document.getElementById("rentalDate").value;
+      const notes = document.getElementById("rentalNotes").value.trim();
+      const mensPackets = Math.max(0, Number(document.getElementById("mensPackets").value) || 0);
+      const womensPackets = Math.max(0, Number(document.getElementById("womensPackets").value) || 0);
+      const individualItems = collectItemValues("rental");
+      const packetItems = convertPacketsToItems(mensPackets, womensPackets);
+      const items = mergeItemCounts(individualItems, packetItems);
+      const totalItems = sumValues(items);
+
+      if (!department) {
+        showMessage(rentalMessage, "Please enter a department or group name.", "error");
+        return;
+      }
+
+      if (!date) {
+        showMessage(rentalMessage, "Please choose the rental date.", "error");
+        return;
+      }
+
+      if (totalItems <= 0) {
+        showMessage(rentalMessage, "Enter at least one rented item quantity greater than zero.", "error");
+        return;
+      }
+
+      state.rentals.unshift({
+        id: createId("rental"),
+        department,
+        date,
+        notes,
+        mensPackets,
+        womensPackets,
+        items,
+        createdAt: new Date().toISOString()
+      });
+
+      saveState();
+      rentalForm.reset();
+      resetNumberInputs("rental", 0);
+      document.getElementById("rentalDate").value = todayString();
+      showMessage(rentalMessage, "Rental saved successfully.", "success");
+      render();
+    }
+
+    // This handles saving a new warehouse snapshot entry.
+    function handleSnapshotSubmit(event) {
+      event.preventDefault();
+      clearMessage(snapshotMessage);
+
+      const date = document.getElementById("snapshotDate").value;
+      const recorder = document.getElementById("snapshotRecorder").value.trim();
+      const notes = document.getElementById("snapshotNotes").value.trim();
+      const counts = collectItemValues("snapshot");
+
+      if (!date) {
+        showMessage(snapshotMessage, "Please choose the count date.", "error");
+        return;
+      }
+
+      state.snapshots.unshift({
+        id: createId("snapshot"),
+        date,
+        recorder,
+        notes,
+        counts,
+        createdAt: new Date().toISOString()
+      });
+
+      saveState();
+      snapshotForm.reset();
+      resetNumberInputs("snapshot", null, state.startingInventory);
+      document.getElementById("snapshotDate").value = todayString();
+      showMessage(snapshotMessage, "Warehouse count saved successfully.", "success");
+      render();
+    }
+
+    // This function reads all quantity inputs for a given form and converts them to numbers.
+    function collectItemValues(formName) {
+      const values = {};
+      document.querySelectorAll(`input[data-form="${formName}"]`).forEach((input) => {
+        const value = Number(input.value);
+        values[input.dataset.item] = Number.isFinite(value) && value >= 0 ? value : 0;
+      });
+      return values;
+    }
+
+    // This function updates every visible section whenever the state changes.
+    function render() {
+      const totals = calculateTotals();
+      renderSummary(totals);
+      renderInventoryHealth(totals);
+      renderRentalHistory();
+      renderSnapshotHistory();
+      storageStatus.textContent = supportsLocalStorage()
+        ? "Local browser storage enabled"
+        : "Storage unavailable in this browser";
+    }
+
+    // This calculation function derives the dashboard values from raw rental and snapshot data.
+    function calculateTotals() {
+      const rentedTotals = createEmptyItemMap();
+      const outstandingTotals = createEmptyItemMap();
+      const today = new Date(`${todayString()}T12:00:00`);
+
+      state.rentals.forEach((rental) => {
+        const rentalDate = new Date(`${rental.date}T12:00:00`);
+        const ageInDays = Math.floor((today - rentalDate) / 86400000);
+        const stillOutstanding = ageInDays < state.settings.rentalCycleDays;
+
+        ITEM_CONFIG.forEach((item) => {
+          const quantity = Number(rental.items[item.key] || 0);
+          rentedTotals[item.key] += quantity;
+          if (stillOutstanding) {
+            outstandingTotals[item.key] += quantity;
+          }
+        });
+      });
+
+      const latestSnapshot = state.snapshots[0] || null;
+      const perItem = ITEM_CONFIG.map((item) => {
+        const starting = state.startingInventory[item.key];
+        const rented = rentedTotals[item.key];
+        const expectedOut = outstandingTotals[item.key];
+        const expectedOnHand = Math.max(starting - expectedOut, 0);
+        const actualOnHand = latestSnapshot ? Number(latestSnapshot.counts[item.key] || 0) : null;
+        const estimatedLoss = latestSnapshot ? Math.max(expectedOnHand - actualOnHand, 0) : 0;
+        const variance = latestSnapshot ? actualOnHand - expectedOnHand : null;
+        const lossRate = rented > 0 ? estimatedLoss / rented : 0;
+        const onHandRate = latestSnapshot && starting > 0 ? actualOnHand / starting : 0;
+
+        return {
+          ...item,
+          starting,
+          rented,
+          expectedOut,
+          expectedOnHand,
+          actualOnHand,
+          estimatedLoss,
+          variance,
+          lossRate,
+          onHandRate
+        };
+      });
+
+      return {
+        perItem,
+        latestSnapshot,
+        rentalCycleDays: state.settings.rentalCycleDays,
+        totalRentalsLogged: state.rentals.length,
+        totalUnitsSent: perItem.reduce((sum, item) => sum + item.rented, 0),
+        totalUnitsExpectedOut: perItem.reduce((sum, item) => sum + item.expectedOut, 0),
+        totalEstimatedLoss: perItem.reduce((sum, item) => sum + item.estimatedLoss, 0)
+      };
+    }
+
+    // This renders the top dashboard numbers.
+    function renderSummary(totals) {
+      totalRentalsCount.textContent = formatNumber(totals.totalRentalsLogged);
+      totalUnitsSent.textContent = formatNumber(totals.totalUnitsSent);
+      latestSnapshotDate.textContent = totals.latestSnapshot ? formatDate(totals.latestSnapshot.date) : "None";
+      totalLossUnits.textContent = formatNumber(totals.totalEstimatedLoss);
+    }
+
+    // This renders a detailed card for each inventory item.
+    function renderInventoryHealth(totals) {
+      const hasSnapshot = Boolean(totals.latestSnapshot);
+
+      if (!hasSnapshot) {
+        summaryGraphic.innerHTML = "";
+        inventoryHealth.innerHTML = `
+          <div class="empty-state">
+            Add your first warehouse count to see what should be in the warehouse, what was counted, and what may be missing.
+          </div>
+        `;
+        dashboardFootnote.textContent = "No warehouse count has been recorded yet. Rentals are being tracked and waiting for a count.";
+        return;
+      }
+
+      summaryGraphic.innerHTML = totals.perItem.map((item) => {
+        const status = getStatus(item.lossRate);
+        const percent = Math.max(0, Math.min(100, 100 - Math.round(item.lossRate * 100)));
+        return `
+          <div class="summary-row">
+            <div class="summary-label">${item.label}</div>
+            <div class="summary-track" aria-label="${item.label} inventory health">
+              <div class="summary-fill ${status.fillClass}" style="width: ${percent}%"></div>
+            </div>
+            <div class="summary-value">${formatNumber(item.estimatedLoss)} missing</div>
+          </div>
+        `;
+      }).join("");
+
+      inventoryHealth.innerHTML = totals.perItem.map((item) => {
+        const status = getStatus(item.lossRate);
+        const meterPercent = Math.max(0, Math.min(100, Math.round(item.onHandRate * 100)));
+
+        return `
+          <article class="health-row">
+            <div class="health-summary">
+              <div>
+                <div class="health-name">${item.label}</div>
+                <div class="health-brief">
+                  ${formatNumber(item.actualOnHand)} counted in the warehouse.
+                  ${formatNumber(item.estimatedLoss)} may be missing or still out.
+                </div>
+              </div>
+              <span class="health-status ${status.className}">${status.label}</span>
+            </div>
+
+            <details class="detail-toggle">
+              <summary></summary>
+              <div class="detail-body">
+                <div class="meter" aria-label="${item.label} on-hand meter">
+                  <div class="meter-fill" style="width: ${meterPercent}%"></div>
+                </div>
+
+                <div class="metric-grid">
+                  <div class="metric">
+                    <div class="metric-title">Total Rented</div>
+                    <div class="metric-value">${formatNumber(item.rented)}</div>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-title">Likely Still Out</div>
+                    <div class="metric-value">${formatNumber(item.expectedOut)}</div>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-title">Should Be In Warehouse</div>
+                    <div class="metric-value">${formatNumber(item.expectedOnHand)}</div>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-title">Counted In Warehouse</div>
+                    <div class="metric-value">${formatNumber(item.actualOnHand)}</div>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-title">Missing / Unaccounted For</div>
+                    <div class="metric-value">${formatNumber(item.estimatedLoss)}</div>
+                  </div>
+                </div>
+
+                <div class="note">
+                  Loss rate: ${formatPercent(item.lossRate)} of rented units.
+                  Difference from expected count: ${item.variance >= 0 ? "+" : ""}${formatNumber(item.variance)}.
+                  Starting inventory: ${formatNumber(item.starting)}.
+                </div>
+              </div>
+            </details>
+          </article>
+        `;
+      }).join("");
+
+      dashboardFootnote.textContent = `Latest warehouse count recorded on ${formatDate(totals.latestSnapshot.date)}. The app assumes most rentals come back after ${totals.rentalCycleDays} day${totals.rentalCycleDays === 1 ? "" : "s"}. If the counted amount is lower than expected, those items may still be out or may be missing.`;
+    }
+
+    // This renders the rental history table or a helpful empty state.
+    function renderRentalHistory() {
+      if (!state.rentals.length) {
+        rentalHistoryWrap.innerHTML = `<div class="empty-state">No rentals recorded yet.</div>`;
+        return;
+      }
+
+      rentalHistoryWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Department</th>
+              <th>Men's Pkts</th>
+              <th>Women's Pkts</th>
+              ${ITEM_CONFIG.map((item) => `<th>${item.short}</th>`).join("")}
+              <th>Total</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.rentals.map((rental) => {
+              const total = sumValues(rental.items);
+              return `
+                <tr>
+                  <td>${formatDate(rental.date)}</td>
+                  <td>${escapeHtml(rental.department)}</td>
+                  <td>${formatNumber(rental.mensPackets || 0)}</td>
+                  <td>${formatNumber(rental.womensPackets || 0)}</td>
+                  ${ITEM_CONFIG.map((item) => `<td>${formatNumber(rental.items[item.key])}</td>`).join("")}
+                  <td>${formatNumber(total)}</td>
+                  <td>${escapeHtml(rental.notes || "—")}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // This renders the snapshot history table or a helpful empty state.
+    function renderSnapshotHistory() {
+      if (!state.snapshots.length) {
+        snapshotHistoryWrap.innerHTML = `<div class="empty-state">No warehouse counts recorded yet.</div>`;
+        return;
+      }
+
+      snapshotHistoryWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Recorder</th>
+              ${ITEM_CONFIG.map((item) => `<th>${item.short}</th>`).join("")}
+              <th>Total On Hand</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.snapshots.map((snapshot) => {
+              const total = sumValues(snapshot.counts);
+              return `
+                <tr>
+                  <td>${formatDate(snapshot.date)}</td>
+                  <td>${escapeHtml(snapshot.recorder || "—")}</td>
+                  ${ITEM_CONFIG.map((item) => `<td>${formatNumber(snapshot.counts[item.key])}</td>`).join("")}
+                  <td>${formatNumber(total)}</td>
+                  <td>${escapeHtml(snapshot.notes || "—")}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    // This loads realistic sample data to make the class demo more compelling.
+    function seedDemoData() {
+      const shouldSeed = window.confirm("Load demo data? This will replace the current data in the app.");
+      if (!shouldSeed) return;
+
+      state = {
+        startingInventory: { ...DEFAULT_STARTING_INVENTORY },
+        settings: { rentalCycleDays: 7 },
+        rentals: [
+          {
+            id: createId("rental"),
+            department: "Campus Recreation",
+            date: shiftDate(-18),
+            notes: "Weekend tournament packet",
+            items: { bathTowels: 90, handTowels: 130, sheets: 55, pillowcases: 55, blankets: 30 },
+            mensPackets: 10,
+            womensPackets: 8,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: createId("rental"),
+            department: "Student Housing",
+            date: shiftDate(-12),
+            notes: "Guest overflow support",
+            items: { bathTowels: 140, handTowels: 180, makeupTowels: 20, sheets: 120, pillowcases: 120, blankets: 65 },
+            mensPackets: 14,
+            womensPackets: 20,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: createId("rental"),
+            department: "Conference Services",
+            date: shiftDate(-7),
+            notes: "Large leadership retreat",
+            items: { bathTowels: 110, handTowels: 140, makeupTowels: 16, sheets: 150, pillowcases: 150, blankets: 70 },
+            mensPackets: 12,
+            womensPackets: 16,
+            createdAt: new Date().toISOString()
+          }
+        ],
+        snapshots: [
+          {
+            id: createId("snapshot"),
+            date: shiftDate(-1),
+            recorder: "Front Office",
+            notes: "Post-conference count with some delayed returns still expected.",
+            counts: { bathTowels: 630, handTowels: 1030, makeupTowels: 430, sheets: 650, pillowcases: 855, blankets: 1775 },
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: createId("snapshot"),
+            date: shiftDate(-9),
+            recorder: "Front Office",
+            notes: "Mid-cycle warehouse count before weekend surge.",
+            counts: { bathTowels: 760, handTowels: 1175, makeupTowels: 465, sheets: 790, pillowcases: 975, blankets: 1860 },
+            createdAt: new Date().toISOString()
+          }
+        ]
+      };
+
+      saveState();
+      showMessage(rentalMessage, "Demo data loaded. You can now test the dashboard and history views.", "success");
+      clearMessage(snapshotMessage);
+      resetFormsToDefaults();
+      render();
+    }
+
+    // This lets the user reset the app to a blank starting point.
+    function clearAllData() {
+      const shouldClear = window.confirm("Reset the app to a blank state and clear all saved rentals, warehouse counts, demo data, and local browser data?");
+      if (!shouldClear) return;
+
+      state = {
+        startingInventory: { ...DEFAULT_STARTING_INVENTORY },
+        settings: { rentalCycleDays: 7 },
+        rentals: [],
+        snapshots: []
+      };
+
+      saveState();
+      resetFormsToDefaults();
+      clearMessage(rentalMessage);
+      clearMessage(snapshotMessage);
+      render();
+    }
+
+    // This creates a downloadable JSON file that can be kept as a backup or moved to another browser.
+    function exportData() {
+      const payload = JSON.stringify(state, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `linen-loss-tracker-${todayString()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // This imports previously exported JSON data back into the app.
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          state = normalizeState(parsed);
+          saveState();
+          resetFormsToDefaults();
+          render();
+          showMessage(snapshotMessage, "Data imported successfully.", "success");
+          clearMessage(rentalMessage);
+        } catch (error) {
+          showMessage(snapshotMessage, "That file could not be imported. Please choose a valid JSON export.", "error");
+        } finally {
+          importFile.value = "";
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // This loads saved data from local storage if available.
+    function loadState() {
+      if (!supportsLocalStorage()) {
+        return normalizeState({});
+      }
+
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return normalizeState({});
+      }
+
+      try {
+        return normalizeState(JSON.parse(raw));
+      } catch (error) {
+        return normalizeState({});
+      }
+    }
+
+    // This saves the current in-memory state into local browser storage.
+    function saveState() {
+      if (!supportsLocalStorage()) return;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // This function ensures imported or saved data still matches the shape our app expects.
+    function normalizeState(candidate) {
+      const startingInventory = { ...DEFAULT_STARTING_INVENTORY, ...(candidate.startingInventory || {}) };
+      const settings = {
+        rentalCycleDays: Math.max(1, Number(candidate.settings?.rentalCycleDays) || 7)
+      };
+      const rentals = Array.isArray(candidate.rentals) ? candidate.rentals.map((rental) => ({
+        id: rental.id || createId("rental"),
+        department: String(rental.department || "").trim(),
+        date: rental.date || todayString(),
+        notes: String(rental.notes || ""),
+        mensPackets: Math.max(0, Number(rental.mensPackets) || 0),
+        womensPackets: Math.max(0, Number(rental.womensPackets) || 0),
+        items: { ...createEmptyItemMap(), ...(rental.items || {}) },
+        createdAt: rental.createdAt || new Date().toISOString()
+      })) : [];
+
+      const snapshots = Array.isArray(candidate.snapshots) ? candidate.snapshots.map((snapshot) => ({
+        id: snapshot.id || createId("snapshot"),
+        date: snapshot.date || todayString(),
+        recorder: String(snapshot.recorder || ""),
+        notes: String(snapshot.notes || ""),
+        counts: { ...createEmptyItemMap(), ...(snapshot.counts || {}) },
+        createdAt: snapshot.createdAt || new Date().toISOString()
+      })) : [];
+
+      rentals.sort((a, b) => compareEntriesByDateDesc(a.date, b.date, a.createdAt, b.createdAt));
+      snapshots.sort((a, b) => compareEntriesByDateDesc(a.date, b.date, a.createdAt, b.createdAt));
+
+      return { startingInventory, settings, rentals, snapshots };
+    }
+
+    // This returns an object with all item keys set to zero.
+    function createEmptyItemMap() {
+      return ITEM_CONFIG.reduce((map, item) => {
+        map[item.key] = 0;
+        return map;
+      }, {});
+    }
+
+    // This gives each new entry a simple unique identifier.
+    function createId(prefix) {
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    // This helps show friendly success or error messages above a form.
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = `message show ${type}`;
+    }
+
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "message";
+    }
+
+    // This resets only the quantity inputs for a specific form.
+    function resetNumberInputs(formName, defaultValue = 0, fallbackMap = null) {
+      document.querySelectorAll(`input[data-form="${formName}"]`).forEach((input) => {
+        if (fallbackMap) {
+          input.value = fallbackMap[input.dataset.item];
+        } else {
+          input.value = defaultValue;
+        }
+      });
+    }
+
+    // This puts forms back into a clean default state after importing, clearing, or seeding.
+    function resetFormsToDefaults() {
+      rentalForm.reset();
+      snapshotForm.reset();
+      settingsForm.reset();
+      resetNumberInputs("rental", 0);
+      resetNumberInputs("snapshot", null, state.startingInventory);
+      resetNumberInputs("settings", null, state.startingInventory);
+      document.getElementById("mensPackets").value = 0;
+      document.getElementById("womensPackets").value = 0;
+      document.getElementById("rentalCycleDays").value = state.settings.rentalCycleDays;
+      document.getElementById("rentalDate").value = todayString();
+      document.getElementById("snapshotDate").value = todayString();
+    }
+
+    // This determines how severe the current estimated loss rate appears.
+    function getStatus(lossRate) {
+      if (lossRate >= 0.12) return { label: "Alert", className: "status-alert", fillClass: "alert" };
+      if (lossRate >= 0.05) return { label: "Watch", className: "status-watch", fillClass: "watch" };
+      return { label: "Healthy", className: "status-good", fillClass: "" };
+    }
+
+    function sumValues(object) {
+      return Object.values(object).reduce((sum, value) => sum + Number(value || 0), 0);
+    }
+
+    function formatNumber(value) {
+      return Number(value || 0).toLocaleString();
+    }
+
+    function formatPercent(value) {
+      return `${(Number(value || 0) * 100).toFixed(1)}%`;
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "None";
+      return new Date(`${dateString}T12:00:00`).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function todayString() {
+      return new Date().toISOString().split("T")[0];
+    }
+
+    function shiftDate(offsetDays) {
+      const date = new Date();
+      date.setDate(date.getDate() + offsetDays);
+      return date.toISOString().split("T")[0];
+    }
+
+    function supportsLocalStorage() {
+      try {
+        const testKey = "__linen_tracker_test__";
+        localStorage.setItem(testKey, "1");
+        localStorage.removeItem(testKey);
+        return true;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function compareEntriesByDateDesc(dateA, dateB, createdAtA, createdAtB) {
+      const first = new Date(createdAtA || `${dateA}T12:00:00`);
+      const second = new Date(createdAtB || `${dateB}T12:00:00`);
+      return second - first;
+    }
+
+    function convertPacketsToItems(mensPackets, womensPackets) {
+      return {
+        bathTowels: mensPackets + womensPackets,
+        handTowels: mensPackets + womensPackets,
+        makeupTowels: womensPackets,
+        sheets: mensPackets + womensPackets,
+        pillowcases: mensPackets + womensPackets,
+        blankets: mensPackets + womensPackets
+      };
+    }
+
+    function mergeItemCounts(baseItems, extraItems) {
+      const merged = createEmptyItemMap();
+      ITEM_CONFIG.forEach((item) => {
+        merged[item.key] = Number(baseItems[item.key] || 0) + Number(extraItems[item.key] || 0);
+      });
+      return merged;
+    }
+
+    // This prevents note text from being interpreted as HTML when it is rendered into tables.
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+  </script>
+</body>
+</html>
